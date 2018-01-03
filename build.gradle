@@ -1,0 +1,70 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+//        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+//apply plugin: 'org.springframework.boot'
+
+//dependencyManagement {
+////    imports {
+////        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+////    }
+//}
+
+dependencies {
+//    compile('org.springframework.boot:spring-boot-starter-actuator')
+//    compile('org.springframework.cloud:spring-cloud-starter-config')
+//    compile('org.springframework.cloud:spring-cloud-config-server')
+//    compile('org.springframework.cloud:spring-cloud-starter-eureka')
+//    compile('org.springframework.cloud:spring-cloud-starter-feign')
+//    compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+//    compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
+//    compile('org.springframework.cloud:spring-cloud-starter-oauth2')
+//    compile('org.springframework.cloud:spring-cloud-starter-ribbon')
+//    compile('org.springframework.cloud:spring-cloud-starter-zuul')
+//    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+//    compileOnly('org.projectlombok:lombok')
+//    testCompile('org.springframework.boot:spring-boot-starter-test')
+//    testCompile('org.springframework.security:spring-security-test')
+}
+
+allprojects {
+    buildscript {
+        repositories {
+            mavenLocal()
+            mavenCentral()
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    apply plugin: 'idea'
+    apply plugin: 'java'
+
+    sourceCompatibility = 1.8
+
+    idea {
+        module {
+            outputDir file('build/classes/main')
+            testOutputDir file('build/classes/test')
+        }
+    }
+    if (project.convention.findPlugin(JavaPluginConvention)) {
+        // Change the output directory for the main and test source sets back to the old path
+        sourceSets.main.output.classesDir = new File(buildDir, "classes/main")
+        sourceSets.test.output.classesDir = new File(buildDir, "classes/test")
+    }
+}

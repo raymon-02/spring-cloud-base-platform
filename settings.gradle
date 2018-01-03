@@ -1,0 +1,5 @@
+rootProject.name = 'spring-cloud-base-platform'
+
+include 'eureka-service'
+include 'info-service'
+
