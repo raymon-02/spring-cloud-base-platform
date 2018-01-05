@@ -10,6 +10,7 @@ group 'com.base.spring'
 version '0.0.1-SNAPSHOT'
 
 dependencies {
+    compile('org.springframework.cloud:spring-cloud-starter-config')
     compile('org.springframework.cloud:spring-cloud-starter-eureka')
     compile('org.springframework.boot:spring-boot-starter-actuator')
     testCompile('org.springframework.boot:spring-boot-starter-test')
