@@ -1,0 +1,8 @@
+zuul:
+  prefix: /api
+  routes:
+    info-service:
+      path: /info-service/**
+      serviceId: info-server
+
+management.security.enabled: false
