@@ -4,5 +4,19 @@ zuul:
     info-service:
       path: /info-service/**
       serviceId: info-server
+    calculate-service:
+      path: /calculate-service/**
+      serviceId: calculate-server
 
 management.security.enabled: false
+
+info-server:
+  ribbon.ReadTimeout: 5000
+
+hystrix:
+  command:
+    info-server:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
