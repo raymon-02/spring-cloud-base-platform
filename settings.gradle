@@ -4,4 +4,5 @@ include 'eureka-service'
 include 'info-service'
 include 'config-service'
 include 'zuul-service'
+include 'calculate-service'
 
