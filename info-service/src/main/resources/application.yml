@@ -1,2 +1,18 @@
 messages:
   hello: Hello from info!
+
+calculate-server:
+  ribbon:
+    ReadTimeout: 5000
+
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
