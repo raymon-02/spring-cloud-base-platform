@@ -1,4 +1,4 @@
-package com.base.spring.filter.pre;
+package com.base.spring.filter.route;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -7,21 +7,21 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_DECORATION_FILTER_ORDER;
-import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_TYPE;
+import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.ROUTE_TYPE;
+import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.SIMPLE_HOST_ROUTING_FILTER_ORDER;
 
 @Slf4j
 @Component
-public class SimplePreFilter extends ZuulFilter {
+public class SimpleRouteFilter extends ZuulFilter {
 
     @Override
     public String filterType() {
-        return PRE_TYPE;
+        return ROUTE_TYPE;
     }
 
     @Override
     public int filterOrder() {
-        return PRE_DECORATION_FILTER_ORDER - 1;
+        return SIMPLE_HOST_ROUTING_FILTER_ORDER - 1;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class SimplePreFilter extends ZuulFilter {
     public Object run() {
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
-        log.info("Pre filter: " + request.getMethod() + " request to " + request.getRequestURI());
+        log.info("Route filter: route " + request.getMethod() + " request to " + request.getRequestURI());
 
         return null;
     }
