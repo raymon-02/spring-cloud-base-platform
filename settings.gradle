@@ -1,8 +1,14 @@
 rootProject.name = 'spring-cloud-base-platform'
 
+include 'calculate-service'
+include 'config-service'
 include 'eureka-service'
 include 'info-service'
-include 'config-service'
 include 'zuul-service'
-include 'calculate-service'
+
+project(':calculate-service').buildFileName = "./build.gradle"
+project(':config-service').buildFileName = "./build.gradle"
+project(':eureka-service').buildFileName = "./build.gradle"
+project(':info-service').buildFileName = "./build.gradle"
+project(':zuul-service').buildFileName = "./build.gradle"
 
