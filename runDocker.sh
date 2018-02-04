@@ -24,37 +24,6 @@ buildService() {
 }
 
 
-runService() {
-    if [[ "$#" -lt 1 ]] || [[ ! -d "./$1" ]]; then
-        echo -e "[Start] Error: service name was not specified or service folder doesn't exist"
-        exit 1
-    fi
-
-    SERVICE_NAME=${1}
-
-    if [[ "$#" -gt 1 ]]; then
-        echo -e "[Start][$SERVICE_NAME] Error: Wrong number of parameters"
-        exit 1
-    fi
-
-    echo "[Start][$SERVICE_NAME] Attempt to start $SERVICE_NAME"
-
-    for f in ./${SERVICE_NAME}/build/libs/${SERVICE_NAME}*.jar; do
-        if [[ -e "$f" ]]; then
-            echo "[Start][$SERVICE_NAME] Found jar to execute: $f"
-            EXEC_JAR=${f}
-            break
-        fi
-        echo -e "[Start][$SERVICE_NAME] Error: no jar with base name: $SERVICE_NAME"
-        exit 1
-    done
-
-    echo -e "[Start][$SERVICE_NAME] Starting $SERVICE_NAME..."
-    DATE=`date '+%Y-%m-%d_%H_%M_%S'`
-    nohup ${JAVA} -jar ${EXEC_JAR} >./log/${SERVICE_NAME}-${DATE}.log 2>&1 &
-}
-
-
 checkServiceRun() {
     if [[ "$#" -ne 1 ]]; then
         echo -e "[Run] Error: Wrong number of parameters"
@@ -62,7 +31,7 @@ checkServiceRun() {
     fi
 
     SERVICE_NAME=${1}
-    service=`${JCMD} | grep ${SERVICE_NAME}`
+    service=`${DOCKER} ps | grep ${SERVICE_NAME}`
 
     if [[ -z ${service} ]]; then
         echo "[Run][$SERVICE_NAME] Error: $SERVICE_NAME has not been started"
@@ -73,29 +42,26 @@ checkServiceRun() {
 
 
 # ====================================================================
-# Check Java exists
-echo "[Java] Checking java exists on the host..."
-if type -p java >/dev/null 2>&1; then
-    echo -e "[Java] Success: found java executable in PATH"
-    JAVA=java
-elif [[ -n "$JAVA_HOME" ]] && [[ -x "$JAVA_HOME/bin/java" ]]; then
-    echo -e "[Java] Success: found java executable in JAVA_HOME"
-    JAVA="$JAVA_HOME/bin/java"
+# Check Docker daemon exists
+echo "[Docker] Checking docker daemon running on the host..."
+if type -p docker >/dev/null 2>&1; then
+    echo -e "[Docker] Success: found docker daemon"
+    DOCKER=docker
 else
-    echo "[Java] Error: no java on the host"
+    echo "[Docker] Error: no docker daemon running on the host"
     exit 1
 fi
 
-# Check Jcmd exists
-echo "[Java] Checking jcmd exists on the host..."
-if type -p jcmd >/dev/null 2>&1; then
-    echo -e "[Java] Success: found jcmd executable in PATH"
-    JCMD=jcmd
-elif [[ -n "$JAVA_HOME" ]] && [[ -x "$JAVA_HOME/bin/java" ]]; then
-    echo -e "[Java] Success: found java executable in JAVA_HOME"
-    JCMD="$JAVA_HOME/bin/jcmd"
+
+# ====================================================================
+# Check docker-compose exists
+echo "[Docker-compose] Checking docker-compose exists on the host..."
+if type -p docker-compose >/dev/null 2>&1; then
+    echo -e "[Docker-compose] Success: found docker-compose on the host"
+    DOCKER_COMPOSE=docker-compose
 else
-    echo "[Java] Warning: no jcmd on the host. Cannot check and stop started services"
+    echo "[Docker] Error: no docker-compose on the host"
+    exit 1
 fi
 
 
@@ -113,15 +79,29 @@ done
 
 
 # ====================================================================
+# Cleaning previous docker containers
+echo -e "\n[Docker clean] Cleaning previous docker containers..."
+for service in ${services[@]}; do
+    ${DOCKER_COMPOSE} stop ${service} 2>/dev/null
+    ${DOCKER_COMPOSE} rm scbp-${service} 2>/dev/null
+done
+
+
+# ====================================================================
+# Building docker-images
+echo -e "\n[Docker build] Building docker images..."
+${DOCKER_COMPOSE} build ${services[@]}
+
+
+# ====================================================================
 # Starting services
 echo -e "\n[Start] Starting services..."
-mkdir -p ./log
 
 # Try to find eureka and run it first
 for service in ${services[@]}; do
     if [[ ${service} == ${EUREKA_SERVICE} ]]; then
         echo "[Start][$EUREKA_SERVICE] Eureka-service was found. Start $EUREKA_SERVICE first"
-        runService ${EUREKA_SERVICE}
+        ${DOCKER_COMPOSE} up -d ${EUREKA_SERVICE}
         sleep 10
         break
     fi
@@ -131,7 +111,7 @@ done
 for service in ${services[@]}; do
     if [[ ${service} == ${CONFIG_SERVICE} ]]; then
         echo "[Start][$CONFIG_SERVICE] Config-service was found. Start $CONFIG_SERVICE first"
-        runService ${CONFIG_SERVICE}
+        ${DOCKER_COMPOSE} up -d ${CONFIG_SERVICE}
         sleep 20
         break
     fi
@@ -141,15 +121,13 @@ for service in ${services[@]}; do
     if [[ ${service} == ${EUREKA_SERVICE} || ${service} == ${CONFIG_SERVICE} ]]; then
         continue
     fi
-    runService ${service}
+    ${DOCKER_COMPOSE} up -d ${service}
 done
 
 
 # ====================================================================
 # Checking started services
-if [[ ! -z "$JCMD" ]]; then
-    echo -e "\n[Run] Checking started services..."
-    for service in ${services[@]}; do
-        checkServiceRun ${service}
-    done
-fi
+echo -e "\n[Run] Checking started services..."
+for service in ${services[@]}; do
+    checkServiceRun ${service}
+done

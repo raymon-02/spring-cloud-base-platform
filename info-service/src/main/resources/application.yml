@@ -16,3 +16,11 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 5000
+
+
+---
+
+spring.profiles: docker
+
+messages:
+  hello: Hello from info and docker!

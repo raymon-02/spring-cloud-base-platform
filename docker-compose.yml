@@ -1,0 +1,72 @@
+version: "3"
+
+services:
+  calculate-service:
+    build:
+      context: .
+      args:
+        - service_name=${CALCULATE_SERVICE_NAME}
+        - version=${VERSION}
+    image: scbp-calculate-service
+    ports:
+     - "8771:8771"
+    environment:
+     - SERVICE_NAME_ENV=${CALCULATE_SERVICE_NAME}
+     - VERSION_ENV=${VERSION}
+    container_name: scbp-calculate-service
+
+  config-service:
+    build:
+      context: .
+      args:
+        - service_name=${CONFIG_SERVICE_NAME}
+        - version=${VERSION}
+    image: scbp-config-service
+    ports:
+     - "8762:8762"
+    environment:
+     - SERVICE_NAME_ENV=${CONFIG_SERVICE_NAME}
+     - VERSION_ENV=${VERSION}
+    container_name: scbp-config-service
+
+  eureka-service:
+    build:
+      context: .
+      args:
+        - service_name=${EUREKA_SERVICE_NAME}
+        - version=${VERSION}
+    image: scbp-eureka-service
+    ports:
+     - "8761:8761"
+    environment:
+     - SERVICE_NAME_ENV=${EUREKA_SERVICE_NAME}
+     - VERSION_ENV=${VERSION}
+    container_name: scbp-eureka-service
+
+  info-service:
+    build:
+      context: .
+      args:
+        - service_name=${INFO_SERVICE_NAME}
+        - version=${VERSION}
+    image: scbp-info-service
+    ports:
+     - "8770:8770"
+    environment:
+     - SERVICE_NAME_ENV=${INFO_SERVICE_NAME}
+     - VERSION_ENV=${VERSION}
+    container_name: scbp-info-service
+
+  zuul-service:
+    build:
+      context: .
+      args:
+        - service_name=${ZUUL_SERVICE_NAME}
+        - version=${VERSION}
+    image: scbp-zuul-service
+    ports:
+     - "8763:8763"
+    environment:
+     - SERVICE_NAME_ENV=${ZUUL_SERVICE_NAME}
+     - VERSION_ENV=${VERSION}
+    container_name: scbp-zuul-service
