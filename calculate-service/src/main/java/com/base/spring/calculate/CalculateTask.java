@@ -1,5 +1,6 @@
 package com.base.spring.calculate;
 
+import com.base.spring.exception.InternalCalculateTaskException;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.stereotype.Component;
@@ -20,18 +21,23 @@ public class CalculateTask {
                     )
             }
     )
-    public String calculateInfo() throws InterruptedException {
-        int randomInt = random.nextInt(3);
-        if (randomInt != 2) {
-            return "No timeout!";
+    public String calculateInfo(int timeout, int error) throws InterruptedException {
+        Thread.sleep(timeout);
+
+        if (throwException(error)) {
+            throw new InternalCalculateTaskException("Calculate exception");
         }
 
-        Thread.sleep(3000L);
-        return "Timeout! But original method";
+        return "Ok!";
     }
 
-    public String calculateInfoFallback() {
-        return "Timeout! Fallback method";
+    public String calculateInfoFallback(int timeout, int error) {
+        return "Hystrix fallback method!";
+    }
+
+    private static boolean throwException(int rate) {
+        int randomInt = random.nextInt(100);
+        return randomInt < rate;
     }
 
 }

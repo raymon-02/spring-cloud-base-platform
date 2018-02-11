@@ -12,8 +12,8 @@ public class CalculateService {
     private CalculateTask calculateTask;
 
     @SneakyThrows
-    public String calculate() {
-        return calculateTask.calculateInfo();
+    public String calculate(int timeout, int error) {
+        return calculateTask.calculateInfo(timeout, error);
     }
 
 }
