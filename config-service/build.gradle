@@ -1,18 +1,16 @@
 buildscript {
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
     }
 }
 
-apply plugin: 'org.springframework.boot'
+apply plugin: "org.springframework.boot"
 
-group 'com.base.spring'
-version '0.0.1-SNAPSHOT'
 
 dependencies {
-    compile('org.springframework.cloud:spring-cloud-config-server')
-    compile('org.springframework.cloud:spring-cloud-starter-eureka')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile "org.springframework.cloud:spring-cloud-config-server"
+    compile "org.springframework.cloud:spring-cloud-starter-eureka"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
 }
 
 dependencyManagement {
@@ -22,6 +20,7 @@ dependencyManagement {
 }
 
 jar {
-    baseName = 'config-service'
-    version = '1.0.0-SNAPSHOT'
+    baseName = "config-service"
+    group = "com.base.spring"
+    version = "1.0.0-SNAPSHOT"
 }
