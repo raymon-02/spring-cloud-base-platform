@@ -3,7 +3,6 @@ rootProject.name = "spring-cloud-base-platform"
 include "calculate-service"
 include "config-service"
 include "eureka-service"
-include "hystrix-turbine-service"
 include "info-service"
 include "zuul-service"
 
