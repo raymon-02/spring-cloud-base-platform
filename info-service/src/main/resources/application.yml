@@ -16,6 +16,10 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 5000
+turbine:
+  aggregator:
+    cluster-config: INFO-SERVER,CALCULATE-SERVER
+  app-config: info-server,calculate-server
 
 
 ---
