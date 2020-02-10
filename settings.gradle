@@ -1,4 +1,4 @@
-rootProject.name = "spring-cloud-base-platform"
+rootProject.name = "spring-cloud-example"
 
 include "calculate-service"
 include "config-service"

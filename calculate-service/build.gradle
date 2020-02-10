@@ -24,6 +24,6 @@ dependencyManagement {
 
 jar {
     baseName = "calculate-service"
-    group = "com.base.spring"
+    group = "io.spring.example"
     version = "1.0.0-SNAPSHOT"
 }

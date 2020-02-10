@@ -83,7 +83,7 @@ done
 echo -e "\n[Docker clean] Cleaning previous docker containers..."
 for service in ${services[@]}; do
     ${DOCKER_COMPOSE} stop ${service} 2>/dev/null
-    ${DOCKER_COMPOSE} rm scbp-${service} 2>/dev/null
+    ${DOCKER_COMPOSE} rm sce-${service} 2>/dev/null
 done
 
 
