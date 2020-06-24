@@ -6,7 +6,7 @@ spring:
     name: calculate-server
   cloud:
     config:
-      name: calculate-server
+      name: sce-calculate-server
       discovery:
         enabled: true
         service-id: config-server

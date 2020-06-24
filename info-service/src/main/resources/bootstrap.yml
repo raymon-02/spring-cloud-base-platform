@@ -6,7 +6,7 @@ spring:
     name: info-server
   cloud:
     config:
-      name: info-server
+      name: sce-info-server
       discovery:
         enabled: true
         service-id: config-server

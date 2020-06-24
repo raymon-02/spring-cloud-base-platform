@@ -6,7 +6,7 @@ spring:
     name: zuul-server
   cloud:
     config:
-      name: zuul-server
+      name: sce-zuul-server
       discovery:
         enabled: true
         service-id: config-server

@@ -5,7 +5,12 @@ spring:
   application:
     name: config-server
   cloud:
-    config.server.git.uri: https://github.com/raymon-02/spring-cloud-base-platform-configs
+    config:
+      name: sce-config-server
+      server:
+        git:
+          uri: https://github.com/raymon-02/spring-cloud-configs
+          search-paths: spring-cloud-example
 
 eureka:
   client:
@@ -14,7 +19,7 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
   instance:
-      prefer-ip-address: true
+    prefer-ip-address: true
 
 
 ---
